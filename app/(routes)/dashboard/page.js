@@ -13,6 +13,8 @@ const Dashboard = () => {
     const [candidates, setCandidates] = useState([]);
     const [allCandidates, setAllCandidates] = useState([]);
     const [chartValues, setChartvalues] = useState([])
+    //const [loggedInUser, setloggedInUser] = useState(null)
+
     const getCandidate = () =>{
         axios.get("https://api.electionresults.belgium.be/candidate")
         .then((res) =>{
@@ -32,7 +34,9 @@ const Dashboard = () => {
     }
 
     useEffect(() =>{
+       
         getCandidate()
+
     },[])
 
   return (

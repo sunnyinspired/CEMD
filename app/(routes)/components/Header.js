@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { MenuItems } from '@/utils/constants/MenuItems';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 // const Hamburger = () =>{
 //     return(
@@ -18,7 +18,8 @@ import { signOut } from 'next-auth/react';
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
-        
+    const {data: session} = useSession()
+    const filteredMenu = MenuItems.slice(0, 4);
   return (
     <header className='bg-white h-12 flex items-center justify-between  px-8 border-t-2 border-red-400 shadow-md flex-wrap w-full'>
         <div className='logo w-1/3 font-bold text-red-500 max-md:block'>
@@ -43,7 +44,16 @@ const Header = () => {
             lg:pl-0 lg:pt-0  lg:text-black`}>
             <ul className='lg:flex lg:items-center lg:mr-8'>
                 {
-                   MenuItems.map(([title, url]) => (
+                    session?.user?.role === 'Super Admin' || session?.user?.role === 'Admin' ?
+                    MenuItems.map(([title, url]) => (
+                        <li key={title}>
+                            <Link href={url} className={`${openMenu && 'hover:bg-transparent hover:text-white'} py-2 px-3 block hover:bg-slate-200 hover:text-red-500 font-semibold text-sm`}>
+                            {title}
+                            </Link>
+                        </li>
+                    ))
+                    :
+                    filteredMenu.map(([title, url]) => (
                         <li key={title}>
                             <Link href={url} className={`${openMenu && 'hover:bg-transparent hover:text-white'} py-2 px-3 block hover:bg-slate-200 hover:text-red-500 font-semibold text-sm`}>
                             {title}
